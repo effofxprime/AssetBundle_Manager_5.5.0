@@ -8,7 +8,7 @@ Some include:
 - ???
 - Profit!!
 
-### h3 How To Use
+### How To Use
 
 - Import both folders into your /assets/ directory.
 - In the Menu Up Top, navigate to AssetBundles
