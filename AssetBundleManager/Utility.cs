@@ -8,7 +8,7 @@ namespace AssetBundles
     public class Utility
     {
         // Should figure out a way to make this a NON const string.  that way I can impliment the commeneted out line below.
-        public const string AssetBundlesOutputPath = "Assets/StreamingAssets/";
+        //public const string AssetBundlesOutputPath = "Assets/StreamingAssets/";
         //public const string AssetBundlesOutputPath = "file://" + Application.streamingAssetsPath + "/";
 
         public static string GetPlatformName()

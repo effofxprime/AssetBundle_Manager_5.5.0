@@ -134,7 +134,7 @@ namespace AssetBundles
 
             // Build and copy AssetBundles.
             BuildScript.BuildAssetBundles();
-            BuildScript.CopyAssetBundlesTo(Path.Combine(Application.streamingAssetsPath, Utility.AssetBundlesOutputPath));
+            //BuildScript.CopyAssetBundlesTo(Path.Combine(Application.streamingAssetsPath, Utility.AssetBundlesOutputPath));
             AssetDatabase.Refresh();
 
 #if UNITY_5_4_OR_NEWER || UNITY_5_3 || UNITY_5_2 || UNITY_5_1 || UNITY_5_0
@@ -156,14 +156,14 @@ namespace AssetBundles
             switch (target)
             {
                 case BuildTarget.Android:
-                    return "/test.apk";
+                    return "/Alpenhorn.apk";
                 case BuildTarget.StandaloneWindows:
                 case BuildTarget.StandaloneWindows64:
                     return "/Alpenhorn.exe";
                 case BuildTarget.StandaloneOSXIntel:
                 case BuildTarget.StandaloneOSXIntel64:
                 case BuildTarget.StandaloneOSXUniversal:
-                    return "/test.app";
+                    return "/Alpenhorn.app";
                 case BuildTarget.WebPlayer:
                 case BuildTarget.WebPlayerStreamed:
                 case BuildTarget.WebGL:
@@ -185,13 +185,13 @@ namespace AssetBundles
             string outputFolder = Utility.GetPlatformName();
 
             // Setup the source folder for assetbundles.
-            var source = Path.Combine(Path.Combine(System.Environment.CurrentDirectory, Utility.AssetBundlesOutputPath), outputFolder);
-            if (!System.IO.Directory.Exists(source))
+            var source = Path.Combine(Path.Combine(System.Environment.CurrentDirectory, Application.streamingAssetsPath), outputFolder);
+            if (!Directory.Exists(source))
                 Debug.Log("No assetBundle output folder, try to build the assetBundles first.");
 
             // Setup the destination folder for assetbundles.
-            var destination = System.IO.Path.Combine(outputPath, outputFolder);
-            if (System.IO.Directory.Exists(destination))
+            var destination = Path.Combine(outputPath, outputFolder);
+            if (Directory.Exists(destination))
                 FileUtil.DeleteFileOrDirectory(destination);
 
             FileUtil.CopyFileOrDirectory(source, destination);
@@ -211,7 +211,7 @@ namespace AssetBundles
 
         static string GetAssetBundleManifestFilePath()
         {
-            var relativeAssetBundlesOutputPathForPlatform = Path.Combine(Utility.AssetBundlesOutputPath, Utility.GetPlatformName());
+            var relativeAssetBundlesOutputPathForPlatform = Path.Combine(Application.streamingAssetsPath, Utility.GetPlatformName());
             return Path.Combine(relativeAssetBundlesOutputPathForPlatform,  Utility.GetPlatformName()) + ".manifest";
         }
     }
