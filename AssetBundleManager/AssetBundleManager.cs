@@ -466,7 +466,7 @@ namespace AssetBundles
                 }
 
                 string url = bundleBaseDownloadingURL + assetBundleName;
-
+                Debug.Log("Download URL: " + url);
                 // For manifest assetbundle, always download it as we don't have hash for it.
                 if (isLoadingAssetBundleManifest)
                     download = new WWW(url);

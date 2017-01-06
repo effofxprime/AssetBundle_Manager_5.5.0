@@ -18,27 +18,27 @@ namespace AssetBundles
         [SerializeField]
         int     m_ServerPID = 0;
 
-        [MenuItem(kLocalAssetbundleServerMenu)]
-        public static void ToggleLocalAssetBundleServer()
-        {
-            bool isRunning = IsRunning();
-            if (!isRunning)
-            {
-                Run();
-            }
-            else
-            {
-                KillRunningAssetBundleServer();
-            }
-        }
+        //[MenuItem(kLocalAssetbundleServerMenu)]
+        //public static void ToggleLocalAssetBundleServer()
+        //{
+        //    bool isRunning = IsRunning();
+        //    if (!isRunning)
+        //    {
+        //        Run();
+        //    }
+        //    else
+        //    {
+        //        KillRunningAssetBundleServer();
+        //    }
+        //}
 
-        [MenuItem(kLocalAssetbundleServerMenu, true)]
-        public static bool ToggleLocalAssetBundleServerValidate()
-        {
-            bool isRunnning = IsRunning();
-            Menu.SetChecked(kLocalAssetbundleServerMenu, isRunnning);
-            return true;
-        }
+        //[MenuItem(kLocalAssetbundleServerMenu, true)]
+        //public static bool ToggleLocalAssetBundleServerValidate()
+        //{
+        //    bool isRunnning = IsRunning();
+        //    Menu.SetChecked(kLocalAssetbundleServerMenu, isRunnning);
+        //    return true;
+        //}
 
         static bool IsRunning()
         {
