@@ -151,8 +151,7 @@ namespace AssetBundles
         WWW m_WWW;
         string m_Url;
 
-        public AssetBundleDownloadFromWebOperation(string assetBundleName, WWW www)
-            : base(assetBundleName)
+        public AssetBundleDownloadFromWebOperation(string assetBundleName, WWW www) : base(assetBundleName)
         {
             if (www == null)
                 throw new System.ArgumentNullException("www");
