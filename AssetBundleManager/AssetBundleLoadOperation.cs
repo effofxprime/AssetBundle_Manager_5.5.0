@@ -31,6 +31,8 @@ namespace AssetBundles
         abstract public bool Update();
 
         abstract public bool IsDone();
+
+        abstract public void Progress();
     }
 
     public abstract class AssetBundleDownloadOperation : AssetBundleLoadOperation
@@ -181,6 +183,11 @@ namespace AssetBundles
         {
             return m_Url;
         }
+
+        public override void Progress()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 #if UNITY_EDITOR
@@ -214,6 +221,11 @@ namespace AssetBundles
         public override bool IsDone()
         {
             return m_Operation == null || m_Operation.isDone;
+        }
+
+        public override void Progress()
+        {
+            throw new System.NotImplementedException();
         }
     }
 #endif
@@ -267,6 +279,11 @@ namespace AssetBundles
 
             return m_Request != null && m_Request.isDone;
         }
+
+        public override void Progress()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public abstract class AssetBundleLoadAssetOperation : AssetBundleLoadOperation
@@ -296,6 +313,11 @@ namespace AssetBundles
         public override bool IsDone()
         {
             return true;
+        }
+
+        public override void Progress()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -352,6 +374,11 @@ namespace AssetBundles
             }
 
             return m_Request != null && m_Request.isDone;
+        }
+
+        public override void Progress()
+        {
+            throw new System.NotImplementedException();
         }
     }
 

@@ -55,7 +55,7 @@ namespace AssetBundles
             // Choose the output path according to the build target.
             string outputPath = CreateAssetBundleDirectory();
 
-            var options = BuildAssetBundleOptions.ChunkBasedCompression;
+            var options = BuildAssetBundleOptions.ForceRebuildAssetBundle;
 
             bool shouldCheckODR = EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS;
 #if UNITY_TVOS
@@ -73,7 +73,7 @@ namespace AssetBundles
             }
 
             //@TODO: use append hash... (Make sure pipeline works correctly with it.)
-            BuildPipeline.BuildAssetBundles(outputPath, BuildAssetBundleOptions.ForceRebuildAssetBundle, EditorUserBuildSettings.activeBuildTarget);
+            BuildPipeline.BuildAssetBundles(outputPath, options, EditorUserBuildSettings.activeBuildTarget);
         }
 
         public static void WriteServerURL()
