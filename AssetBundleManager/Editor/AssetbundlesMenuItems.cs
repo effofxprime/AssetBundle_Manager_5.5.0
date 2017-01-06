@@ -1,6 +1,4 @@
-using UnityEngine;
 using UnityEditor;
-using System.Collections;
 
 namespace AssetBundles
 {
@@ -25,6 +23,12 @@ namespace AssetBundles
         static public void BuildAssetBundles()
         {
             BuildScript.BuildAssetBundles();
+        }
+
+        [MenuItem("AssetBundles/Rebuild Build AssetBundles")]
+        static public void RebuildBuildAssetBundles()
+        {
+            BuildScript.RebuildBuildAssetBundles();
         }
 
         [MenuItem ("AssetBundles/Build Player (for use with engine code stripping)")]

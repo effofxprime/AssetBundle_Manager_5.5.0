@@ -50,6 +50,32 @@ namespace AssetBundles
             BuildPipeline.BuildAssetBundles(outputPath, options, EditorUserBuildSettings.activeBuildTarget);
         }
 
+        public static void RebuildBuildAssetBundles()
+        {
+            // Choose the output path according to the build target.
+            string outputPath = CreateAssetBundleDirectory();
+
+            var options = BuildAssetBundleOptions.ChunkBasedCompression;
+
+            bool shouldCheckODR = EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS;
+#if UNITY_TVOS
+            shouldCheckODR |= EditorUserBuildSettings.activeBuildTarget == BuildTarget.tvOS;
+#endif
+            if (shouldCheckODR)
+            {
+#if ENABLE_IOS_ON_DEMAND_RESOURCES
+                if (PlayerSettings.iOS.useOnDemandResources)
+                    options |= BuildAssetBundleOptions.UncompressedAssetBundle;
+#endif
+#if ENABLE_IOS_APP_SLICING
+                options |= BuildAssetBundleOptions.UncompressedAssetBundle;
+#endif
+            }
+
+            //@TODO: use append hash... (Make sure pipeline works correctly with it.)
+            BuildPipeline.BuildAssetBundles(outputPath, BuildAssetBundleOptions.ForceRebuildAssetBundle, EditorUserBuildSettings.activeBuildTarget);
+        }
+
         public static void WriteServerURL()
         {
             string downloadURL;
