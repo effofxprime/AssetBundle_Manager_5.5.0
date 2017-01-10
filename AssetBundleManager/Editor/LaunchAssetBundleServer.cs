@@ -8,12 +8,13 @@ using System;
 using System.Net;
 using System.Threading;
 using UnityEditor.Utils;
+using System.Linq;
 
 namespace AssetBundles
 {
     internal class LaunchAssetBundleServer : ScriptableSingleton<LaunchAssetBundleServer>
     {
-        const string kLocalAssetbundleServerMenu = "AssetBundles/Local AssetBundle Server";
+        //const string kLocalAssetbundleServerMenu = "AssetBundles/Local AssetBundle Server";
 
         [SerializeField]
         int     m_ServerPID = 0;
@@ -88,7 +89,7 @@ namespace AssetBundles
 
             string args = assetBundlesDirectory;
             args = string.Format("\"{0}\" {1}", args, Process.GetCurrentProcess().Id);
-            ProcessStartInfo startInfo = ExecuteInternalMono.GetProfileStartInfoForMono(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), "4.0", pathToAssetServer, args, true);
+            ProcessStartInfo startInfo = ExecuteInternalMono.GetProfileStartInfoForMono(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), GetMonoProfileVersion(), pathToAssetServer, args, true);
             //return Path.Combine(editorAppPath, "Contents"); 
             startInfo.WorkingDirectory = assetBundlesDirectory;
             startInfo.UseShellExecute = false;
@@ -103,6 +104,28 @@ namespace AssetBundles
                 //We seem to have launched, let's save the PID
                 instance.m_ServerPID = launchProcess.Id;
             }
+        }
+
+        static string GetMonoProfileVersion()
+        {
+            string path = Path.Combine(Path.Combine(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), "lib"), "mono");
+
+            string[] folders = Directory.GetDirectories(path);
+            string[] foldersWithApi = folders.Where(f => f.Contains("-api")).ToArray();
+            float profileVersion = 1.0f;
+
+            for (int i = 0; i < foldersWithApi.Length; i++)
+            {
+                foldersWithApi[i] = foldersWithApi[i].Split('\\').Last();
+                foldersWithApi[i] = foldersWithApi[i].Split('-').First();
+
+                if (float.Parse(foldersWithApi[i]) > profileVersion)
+                {
+                    profileVersion = float.Parse(foldersWithApi[i]);
+                }
+            }
+
+            return profileVersion.ToString();
         }
     }
 }
