@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.iOS;
 #endif
 using System.Collections;
+using System;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 namespace AssetBundles
 {
@@ -32,13 +36,14 @@ namespace AssetBundles
 
         abstract public bool IsDone();
 
-        abstract public void Progress();
+        abstract public float Progress(Stopwatch sw, int counter, int counterGoal);
+        //abstract public string Progress(DateTime processStarted, int totalElements, int processedElements);
     }
 
     public abstract class AssetBundleDownloadOperation : AssetBundleLoadOperation
     {
         bool done;
-
+        
         public string assetBundleName { get; private set; }
         public LoadedAssetBundle assetBundle { get; protected set; }
         public string error { get; protected set; }
@@ -184,9 +189,30 @@ namespace AssetBundles
             return m_Url;
         }
 
-        public override void Progress()
+        public override float Progress(Stopwatch sw, int counter, int counterGoal)
+        //public override string Progress(DateTime processStarted, int totalElements, int processedElements)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
+            /* this is based off of:
+             * (TimeTaken / linesProcessed) * linesLeft=timeLeft
+             * so we have
+             * (10/100) * 200 = 20 Seconds now 10 seconds go past
+             * (20/100) * 200 = 40 Seconds left now 10 more seconds and we process 100 more lines
+             * (30/200) * 100 = 15 Seconds and now we all see why the copy file dialog jumps from 3 hours to 30 minutes :-)
+             * 
+             * pulled from http://stackoverflow.com/questions/473355/calculate-time-remaining/473369#473369
+             */
+            //if (counter == 0) return TimeSpan.Zero;
+            float elapsedMin = ((float)sw.ElapsedMilliseconds / 1000) / 60;
+            float minLeft = (elapsedMin / counter) * (counterGoal - counter); //see comment a
+            return minLeft;
+            //TimeSpan ret = TimeSpan.FromMinutes(minLeft);
+            //return ret;
+            //int itemsPerSecond = processedElements / (int)(processStarted - DateTime.Now).TotalSeconds;
+            //int secondsRemaining = (totalElements - processedElements) / itemsPerSecond;
+
+            //return new TimeSpan(0, 0, secondsRemaining).ToString();
+
         }
     }
 
@@ -223,9 +249,30 @@ namespace AssetBundles
             return m_Operation == null || m_Operation.isDone;
         }
 
-        public override void Progress()
+        public override float Progress(Stopwatch sw, int counter, int counterGoal)
+        //public override string Progress(DateTime processStarted, int totalElements, int processedElements)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
+            /* this is based off of:
+             * (TimeTaken / linesProcessed) * linesLeft=timeLeft
+             * so we have
+             * (10/100) * 200 = 20 Seconds now 10 seconds go past
+             * (20/100) * 200 = 40 Seconds left now 10 more seconds and we process 100 more lines
+             * (30/200) * 100 = 15 Seconds and now we all see why the copy file dialog jumps from 3 hours to 30 minutes :-)
+             * 
+             * pulled from http://stackoverflow.com/questions/473355/calculate-time-remaining/473369#473369
+             */
+            //if (counter == 0) return TimeSpan.Zero;
+            float elapsedMin = ((float)sw.ElapsedMilliseconds / 1000) / 60;
+            float minLeft = (elapsedMin / counter) * (counterGoal - counter); //see comment a
+            return minLeft;
+            //TimeSpan ret = TimeSpan.FromMinutes(minLeft);
+            //return ret;
+            //int itemsPerSecond = processedElements / (int)(processStarted - DateTime.Now).TotalSeconds;
+            //int secondsRemaining = (totalElements - processedElements) / itemsPerSecond;
+
+            //return new TimeSpan(0, 0, secondsRemaining).ToString();
+
         }
     }
 #endif
@@ -280,9 +327,30 @@ namespace AssetBundles
             return m_Request != null && m_Request.isDone;
         }
 
-        public override void Progress()
+        public override float Progress(Stopwatch sw, int counter, int counterGoal)
+        //public override string Progress(DateTime processStarted, int totalElements, int processedElements)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
+            /* this is based off of:
+             * (TimeTaken / linesProcessed) * linesLeft=timeLeft
+             * so we have
+             * (10/100) * 200 = 20 Seconds now 10 seconds go past
+             * (20/100) * 200 = 40 Seconds left now 10 more seconds and we process 100 more lines
+             * (30/200) * 100 = 15 Seconds and now we all see why the copy file dialog jumps from 3 hours to 30 minutes :-)
+             * 
+             * pulled from http://stackoverflow.com/questions/473355/calculate-time-remaining/473369#473369
+             */
+            //if (counter == 0) return TimeSpan.Zero;
+            float elapsedMin = ((float)sw.ElapsedMilliseconds / 1000) / 60;
+            float minLeft = (elapsedMin / counter) * (counterGoal - counter); //see comment a
+            return minLeft;
+            //TimeSpan ret = TimeSpan.FromMinutes(minLeft);
+            //return ret;
+            //int itemsPerSecond = processedElements / (int)(processStarted - DateTime.Now).TotalSeconds;
+            //int secondsRemaining = (totalElements - processedElements) / itemsPerSecond;
+
+            //return new TimeSpan(0, 0, secondsRemaining).ToString();
+
         }
     }
 
@@ -293,7 +361,7 @@ namespace AssetBundles
 
     public class AssetBundleLoadAssetOperationSimulation : AssetBundleLoadAssetOperation
     {
-        Object                          m_SimulatedObject;
+        Object m_SimulatedObject;
 
         public AssetBundleLoadAssetOperationSimulation(Object simulatedObject)
         {
@@ -315,9 +383,30 @@ namespace AssetBundles
             return true;
         }
 
-        public override void Progress()
+        public override float Progress(Stopwatch sw, int counter, int counterGoal)
+        //public override string Progress(DateTime processStarted, int totalElements, int processedElements)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
+            /* this is based off of:
+             * (TimeTaken / linesProcessed) * linesLeft=timeLeft
+             * so we have
+             * (10/100) * 200 = 20 Seconds now 10 seconds go past
+             * (20/100) * 200 = 40 Seconds left now 10 more seconds and we process 100 more lines
+             * (30/200) * 100 = 15 Seconds and now we all see why the copy file dialog jumps from 3 hours to 30 minutes :-)
+             * 
+             * pulled from http://stackoverflow.com/questions/473355/calculate-time-remaining/473369#473369
+             */
+            //if (counter == 0) return TimeSpan.Zero;
+            float elapsedMin = ((float)sw.ElapsedMilliseconds / 1000) / 60;
+            float minLeft = (elapsedMin / counter) * (counterGoal - counter); //see comment a
+            return minLeft;
+            //TimeSpan ret = TimeSpan.FromMinutes(minLeft);
+            //return ret;
+            //int itemsPerSecond = processedElements / (int)(processStarted - DateTime.Now).TotalSeconds;
+            //int secondsRemaining = (totalElements - processedElements) / itemsPerSecond;
+
+            //return new TimeSpan(0, 0, secondsRemaining).ToString();
+
         }
     }
 
@@ -376,9 +465,30 @@ namespace AssetBundles
             return m_Request != null && m_Request.isDone;
         }
 
-        public override void Progress()
+        public override float Progress(Stopwatch sw, int counter, int counterGoal)
+        //public override string Progress(DateTime processStarted, int totalElements, int processedElements)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
+            /* this is based off of:
+             * (TimeTaken / linesProcessed) * linesLeft=timeLeft
+             * so we have
+             * (10/100) * 200 = 20 Seconds now 10 seconds go past
+             * (20/100) * 200 = 40 Seconds left now 10 more seconds and we process 100 more lines
+             * (30/200) * 100 = 15 Seconds and now we all see why the copy file dialog jumps from 3 hours to 30 minutes :-)
+             * 
+             * pulled from http://stackoverflow.com/questions/473355/calculate-time-remaining/473369#473369
+             */
+            //if (counter == 0) return TimeSpan.Zero;
+            float elapsedMin = ((float)sw.ElapsedMilliseconds / 1000) / 60;
+            float minLeft = (elapsedMin / counter) * (counterGoal - counter); //see comment a
+            return minLeft;
+            //TimeSpan ret = TimeSpan.FromMinutes(minLeft);
+            //return ret;
+            //int itemsPerSecond = processedElements / (int)(processStarted - DateTime.Now).TotalSeconds;
+            //int secondsRemaining = (totalElements - processedElements) / itemsPerSecond;
+
+            //return new TimeSpan(0, 0, secondsRemaining).ToString();
+
         }
     }
 
