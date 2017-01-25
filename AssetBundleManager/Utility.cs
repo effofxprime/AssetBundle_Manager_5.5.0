@@ -35,8 +35,10 @@ namespace AssetBundles
                     return "iOS";
                 case BuildTarget.WebGL:
                     return "WebGL";
+#if !UNITY_5_4_OR_NEWER
                 case BuildTarget.WebPlayer:
                     return "WebPlayer";
+#endif
                 case BuildTarget.StandaloneWindows:
                 case BuildTarget.StandaloneWindows64:
                     return "Windows";
@@ -66,9 +68,11 @@ namespace AssetBundles
 #endif
                 case RuntimePlatform.WebGLPlayer:
                     return "WebGL";
+#if !UNITY_5_4_OR_NEWER
                 case RuntimePlatform.OSXWebPlayer:
                 case RuntimePlatform.WindowsWebPlayer:
                     return "WebPlayer";
+#endif
                 case RuntimePlatform.WindowsPlayer:
                     return "Windows";
                 case RuntimePlatform.OSXPlayer:
