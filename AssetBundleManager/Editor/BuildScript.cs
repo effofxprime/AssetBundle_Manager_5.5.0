@@ -16,10 +16,12 @@ namespace AssetBundles
         static public string CreateAssetBundleDirectory()
         {
             // Choose the output path according to the build target.
-            //string outputPath = Path.Combine(Utility.AssetBundlesOutputPath, Utility.GetPlatformName());
-            string outputPath = Path.Combine(Application.streamingAssetsPath, Utility.GetPlatformName());
+            string outputPath = Path.Combine(Utility.GetAssetBundlesOutputPath(), Utility.GetPlatformName());
             if (!Directory.Exists(outputPath))
+            {
+                Debug.Log("Creating directory " + outputPath);
                 Directory.CreateDirectory(outputPath);
+            }
 
             return outputPath;
         }
@@ -160,7 +162,7 @@ namespace AssetBundles
 
             // Build and copy AssetBundles.
             BuildScript.BuildAssetBundles();
-            //BuildScript.CopyAssetBundlesTo(Path.Combine(Application.streamingAssetsPath, Utility.AssetBundlesOutputPath));
+            //BuildScript.CopyAssetBundlesTo(Path.Combine(Utility.GetAssetBundlesOutputPath(), Utility.AssetBundlesOutputPath));
             AssetDatabase.Refresh();
 
 #if UNITY_5_4_OR_NEWER || UNITY_5_3 || UNITY_5_2 || UNITY_5_1 || UNITY_5_0
@@ -190,8 +192,10 @@ namespace AssetBundles
                 case BuildTarget.StandaloneOSXIntel64:
                 case BuildTarget.StandaloneOSXUniversal:
                     return "/Alpenhorn.app";
+#if !UNITY_5_4_OR_NEWER
                 case BuildTarget.WebPlayer:
                 case BuildTarget.WebPlayerStreamed:
+#endif
                 case BuildTarget.WebGL:
                 case BuildTarget.iOS:
                     return "";
@@ -205,13 +209,13 @@ namespace AssetBundles
         static void CopyAssetBundlesTo(string outputPath)
         {
             // Clear streaming assets folder.
-            FileUtil.DeleteFileOrDirectory(Application.streamingAssetsPath);
+            FileUtil.DeleteFileOrDirectory(Utility.GetAssetBundlesOutputPath());
             Directory.CreateDirectory(outputPath);
 
             string outputFolder = Utility.GetPlatformName();
 
             // Setup the source folder for assetbundles.
-            var source = Path.Combine(Path.Combine(System.Environment.CurrentDirectory, Application.streamingAssetsPath), outputFolder);
+            var source = Path.Combine(Path.Combine(System.Environment.CurrentDirectory, Utility.GetAssetBundlesBasePath()), outputFolder);
             if (!Directory.Exists(source))
                 Debug.Log("No assetBundle output folder, try to build the assetBundles first.");
 
@@ -237,8 +241,16 @@ namespace AssetBundles
 
         static string GetAssetBundleManifestFilePath()
         {
-            var relativeAssetBundlesOutputPathForPlatform = Path.Combine(Application.streamingAssetsPath, Utility.GetPlatformName());
+            var relativeAssetBundlesOutputPathForPlatform = Path.Combine(Utility.GetAssetBundlesOutputPath(), Utility.GetPlatformName());
             return Path.Combine(relativeAssetBundlesOutputPathForPlatform,  Utility.GetPlatformName()) + ".manifest";
         }
+
+        ////public static void SelectAssetBundleOutputPath()
+        ////{
+        ////    var outputPath = EditorUtility.SaveFolderPanel("Choose Location of asset bundles", "", "");
+        ////    if (outputPath.Length == 0)
+        ////        return;
+        ////    ////Utility.basePathType = 
+        ////}
     }
 }

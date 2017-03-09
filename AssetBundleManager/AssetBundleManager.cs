@@ -175,7 +175,7 @@ namespace AssetBundles
         /// </summary>
         public static void SetSourceAssetBundleDirectory(string relativePath)
         {
-            BaseDownloadingURL = GetStreamingAssetsPath() + relativePath;
+            BaseDownloadingURL = Utility.GetAssetBundlesOutputUrl() + relativePath;
         }
 
         /// <summary>
@@ -598,6 +598,18 @@ namespace AssetBundles
             if (SimulateAssetBundleInEditor)
             {
                 string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(assetBundleName, assetName);
+                if (assetPaths.Length == 0)
+                {
+                    foreach (var variant in m_ActiveVariants)
+                    {
+                        string variantAssetBundleName = assetBundleName + '.' + variant;
+                        assetPaths = AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(variantAssetBundleName, assetName);
+                        if (assetPaths.Length > 0)
+                        {
+                            break;
+                        }
+                    }
+                }
                 if (assetPaths.Length == 0)
                 {
                     Log(LogType.Error, "There is no asset with name \"" + assetName + "\" in " + assetBundleName);
